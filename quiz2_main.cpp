@@ -10,16 +10,16 @@ const int MAX_CASE_NUM = 100;
 const int MAX_STATEMENT_NUM = 10000;
 const string simbols = "(+*) ";
 
-void bracketCaseCal(const string text);
-string replace(const string &text, const string &pattern, const string &replace, int &nCount);
+void Bracket_Calculate(const string text);
+string Replace(const string &text, const string &pattern, const string &replace, int &nCount);
 int PostFix_Calculate(const string text);
 string GetPostFix(const string text);
 
-// ÈÄÀ§½Ä °è»ê ÇÔ¼ö
-// text : ÈÄÀ§½Ä ÀÔ·Â 
+// í›„ìœ„ì‹ ê³„ì‚° í•¨ìˆ˜
+// text : í›„ìœ„ì‹ ì…ë ¥ 
 int PostFix_Calculate(const string text)
 {
-	vector<int> stack; // °ıÈ£´ÜÀ§·Î Áß°£ °ªÀ» ÀúÀåÇÏ±â À§ÇÑ ½ºÅÃ
+	vector<int> stack; // ê´„í˜¸ë‹¨ìœ„ë¡œ ì¤‘ê°„ ê°’ì„ ì €ì¥í•˜ê¸° ìœ„í•œ ìŠ¤íƒ
 	string str;
 	int nPreValue = 0;
 	int nAfterValue = 0;
@@ -30,13 +30,13 @@ int PostFix_Calculate(const string text)
 	while (PostFix_Expressions.eof() == false)
 	{
 		PostFix_Expressions >> str;
-		// ¼ıÀÚÀÎ °æ¿ì
+		// ìˆ«ìì¸ ê²½ìš°
 		if (simbols.find(str) == string::npos)
 		{			
 			stringstream(str) >> nNumber;
 			stack.push_back(nNumber);
 		}
-		else //¿¬»ê½ÄÀÎ °æ¿ì
+		else //ì—°ì‚°ì‹ì¸ ê²½ìš°
 		{			
 			nAfterValue = stack.back();
 			stack.pop_back();
@@ -47,13 +47,13 @@ int PostFix_Calculate(const string text)
 			switch (simbols[simbols.find(str)])
 			{
 			case '+':				
-				nValue = ((nPreValue + nAfterValue) % 100000000); // ³ª¸ÓÁö ¿¬»ê				
+				nValue = ((nPreValue + nAfterValue) % 100000000); // ë‚˜ë¨¸ì§€ ì—°ì‚°				
 				stack.push_back(nValue);
 				
 				break;
 
 			case '*':				
-				nValue = ((nPreValue * nAfterValue) % 100000000); // ³ª¸ÓÁö ¿¬»ê				
+				nValue = ((nPreValue * nAfterValue) % 100000000); // ë‚˜ë¨¸ì§€ ì—°ì‚°				
 				stack.push_back(nValue);
 				
 				break;
@@ -64,23 +64,23 @@ int PostFix_Calculate(const string text)
 	return stack.back();
 }
 
-// Ä¡È¯ ¹®ÀÚ¿­À» ÈÄÀ§½ÄÀ¸·Î º¯°æÇÏ´Â ÇÔ¼ö
-// text : °ıÈ£½ÄÀÌ Ä¡È¯µÈ ¹®ÀÚ¿­
+// ì¹˜í™˜ ë¬¸ìì—´ì„ í›„ìœ„ì‹ìœ¼ë¡œ ë³€ê²½í•˜ëŠ” í•¨ìˆ˜
+// text : ê´„í˜¸ì‹ì´ ì¹˜í™˜ëœ ë¬¸ìì—´
 
 string GetPostFix(const string text)
 {
-	char cSumflag = 0; // 33, 11, 22 µîÀÇ ½Ä¿¡ »ı·«µÈ ´õÇÏ±â¸¦ Ãß°¡ÇÏ±â À§ÇÑ ÇÃ·¡±×
-	string PostFix_Expressions; // ÈÄÀ§½Ä ÀúÀå ¹®ÀÚ¿­
-	vector<char> stack; // ÈÄÀ§½ÄÀ¸·Î º¯°æÇÏ±â À§ÇØ »ç¿ëµÇ´Â Stack
+	char cSumflag = 0; // 33, 11, 22 ë“±ì˜ ì‹ì— ìƒëµëœ ë”í•˜ê¸°ë¥¼ ì¶”ê°€í•˜ê¸° ìœ„í•œ í”Œë˜ê·¸
+	string PostFix_Expressions; // í›„ìœ„ì‹ ì €ì¥ ë¬¸ìì—´
+	vector<char> stack; // í›„ìœ„ì‹ìœ¼ë¡œ ë³€ê²½í•˜ê¸° ìœ„í•´ ì‚¬ìš©ë˜ëŠ” Stack
 
 	auto end = text.end();
 	for (auto it = text.begin(); it != end; ++it)
 	{
-		// ¼ıÀÚÀÎ °æ¿ì
+		// ìˆ«ìì¸ ê²½ìš°
 		if (simbols.find(*it) == string::npos)
 		{
-			// Ä¡È¯ ¹®ÀÚ¿­ Æ¯¼º »ó ¼ıÀÚ°¡ Áßº¹µÈ °æ¿ì
-			// Áßº¹ ¼ıÀÚ Áß°£¿¡ + ±âÈ£¸¦ Ãß°¡ÇÑ´Ù.
+			// ì¹˜í™˜ ë¬¸ìì—´ íŠ¹ì„± ìƒ ìˆ«ìê°€ ì¤‘ë³µëœ ê²½ìš°
+			// ì¤‘ë³µ ìˆ«ì ì¤‘ê°„ì— + ê¸°í˜¸ë¥¼ ì¶”ê°€í•œë‹¤.
 			if (cSumflag == 1)
 			{
 				while (stack.size() != 0 && stack.back() != '(')
@@ -94,15 +94,15 @@ string GetPostFix(const string text)
 				PostFix_Expressions += " ";
 			}
 
-			// ÇÃ·¡±× ¼³Á¤ÇÏ°í ÈÄÀ§½Ä ¹®ÀÚ¿­¿¡ ÀúÀå
+			// í”Œë˜ê·¸ ì„¤ì •í•˜ê³  í›„ìœ„ì‹ ë¬¸ìì—´ì— ì €ì¥
 			PostFix_Expressions += *it;
 			cSumflag = 1;
 
 			continue;
 		}
 
-		// ¿¬»êÀÚÀÎ °æ¿ì
-		// ÇÃ·¡±×¸¦ ¸®¼Â
+		// ì—°ì‚°ìì¸ ê²½ìš°
+		// í”Œë˜ê·¸ë¥¼ ë¦¬ì…‹
 		cSumflag = 0;		
 		PostFix_Expressions += " ";
 
@@ -113,8 +113,8 @@ string GetPostFix(const string text)
 			break;
 
 		case ')':
-			// °ıÈ£ Ã³¸®
-			// ÀÌÀü Á¤ÀÇÇÑ °ıÈ£°¡ ³ª¿Ã¶§±îÁö ½ºÅÃ¿¡ ÀÖ´Â ¹®ÀÚ¿­À» ÈÄÀ§½ÄÀ¸·Î ÀúÀå			
+			// ê´„í˜¸ ì²˜ë¦¬
+			// ì´ì „ ì •ì˜í•œ ê´„í˜¸ê°€ ë‚˜ì˜¬ë•Œê¹Œì§€ ìŠ¤íƒì— ìˆëŠ” ë¬¸ìì—´ì„ í›„ìœ„ì‹ìœ¼ë¡œ ì €ì¥			
 			while (stack.back() != '(')
 			{
 				PostFix_Expressions += stack.back();
@@ -122,7 +122,7 @@ string GetPostFix(const string text)
 				stack.pop_back();
 			}
 			stack.pop_back();
-			cSumflag = 1; // °ıÈ£¿Í ¼ıÀÚ»çÀÌ¿¡ ´õÇÏ±â¸¦ Ãß°¡ ÇÏ±â À§ÇØ ¼³Á¤
+			cSumflag = 1; // ê´„í˜¸ì™€ ìˆ«ìì‚¬ì´ì— ë”í•˜ê¸°ë¥¼ ì¶”ê°€ í•˜ê¸° ìœ„í•´ ì„¤ì •
 			break;
 
 		case '*':
@@ -135,7 +135,7 @@ string GetPostFix(const string text)
 		}		
 	}
 
-	// ½ºÅÃ¿¡ ³²¾ÆÀÖ´Â ¹®ÀÚ¿­µéÀ» ÈÄÀ§½ÄÀ¸·Î ÀúÀå
+	// ìŠ¤íƒì— ë‚¨ì•„ìˆëŠ” ë¬¸ìì—´ë“¤ì„ í›„ìœ„ì‹ìœ¼ë¡œ ì €ì¥
 	size_t stackSize = stack.size();
 	for (size_t i = 0; i < stackSize; ++i)
 	{
@@ -147,13 +147,13 @@ string GetPostFix(const string text)
 	return PostFix_Expressions;
 }
 
-// ¹®ÀÚ¿­ÀÇ Æ¯Á¤ ¹®ÀÚ¸¦ Ä¡È¯ÇÏ´Â ÇÔ¼ö
-// text : ÀÔ·Â ¹®ÀÚ¿­
-// pattern : Ä¡È¯ Å¸°Ù ¹®ÀÚ
-// replace : Ä¡È¯ ¹®ÀÚ
-// nCount : Ä¡È¯µÈ ¹®ÀÚ ¼ö
+// ë¬¸ìì—´ì˜ íŠ¹ì • ë¬¸ìë¥¼ ì¹˜í™˜í•˜ëŠ” í•¨ìˆ˜
+// text : ì…ë ¥ ë¬¸ìì—´
+// pattern : ì¹˜í™˜ íƒ€ê²Ÿ ë¬¸ì
+// replace : ì¹˜í™˜ ë¬¸ì
+// nCount : ì¹˜í™˜ëœ ë¬¸ì ìˆ˜
 
-string replace(const string &text, const string &pattern, const string &replace, int &nCount)
+string Replace(const string &text, const string &pattern, const string &replace, int &nCount)
 {
 	string result;
 	string::size_type pos = 0;
@@ -171,40 +171,30 @@ string replace(const string &text, const string &pattern, const string &replace,
 	return result;
 }
 
-// ÀÔ·Â¹ŞÀº ¹®ÀÚ¿­À» ¾Ë¸Â°Ô Ä¡È¯ÇÏ°í °è»êÇÏ´Â ÇÔ¼ö
-// text : °ıÈ£ ¹®ÀÚ¿­
+// ì…ë ¥ë°›ì€ ë¬¸ìì—´ì„ ì•Œë§ê²Œ ì¹˜í™˜í•˜ê³  ê³„ì‚°í•˜ëŠ” í•¨ìˆ˜
+// text : ê´„í˜¸ ë¬¸ìì—´
 
-void bracketCaseCal(const string text)
+void Bracket_Calculate(const string text)
 {
 	int nPreCount = 0;
 	int nAfterCount = 0;
 	int ntemp = 0;
 	string statement;
 
-	// ÀÔ·ÂµÈ °ıÈ£ ¹®ÀÚ¿­À» Ä¡È¯ÇÑ´Ù. 
-	// ()´Â 1·Î {}´Â 2·Î []´Â 3À¸·Î Ä¡È¯ÇÑ´Ù.
-	// ¿¬¼ÓµÇÁö ¾Ê´Â °ıÈ£´Â °öÇÏ±â ÀÌ¹Ç·Î ±×¿¡ ¸Â°Ô 	
-	// ¾ÕÂÊ °ıÈ£´Â 'X*(' ·Î Ä¡È¯ÇÏ°í µÚÂÊ °ıÈ£´Â ')'·Î Ä¡È¯ÇÑ´Ù.
+	// ì…ë ¥ëœ ê´„í˜¸ ë¬¸ìì—´ì„ ì¹˜í™˜í•œë‹¤. 
+	// ()ëŠ” 1ë¡œ {}ëŠ” 2ë¡œ []ëŠ” 3ìœ¼ë¡œ ì¹˜í™˜í•œë‹¤.
+	// ì—°ì†ë˜ì§€ ì•ŠëŠ” ê´„í˜¸ëŠ” ê³±í•˜ê¸° ì´ë¯€ë¡œ ê·¸ì— ë§ê²Œ 	
+	// ì•ìª½ ê´„í˜¸ëŠ” 'X*(' ë¡œ ì¹˜í™˜í•˜ê³  ë’¤ìª½ ê´„í˜¸ëŠ” ')'ë¡œ ì¹˜í™˜í•œë‹¤.
 
 	statement = text;
 
-	statement = replace(statement, "()", "1", ntemp);
-	statement = replace(statement, "{}", "2", ntemp);
-	statement = replace(statement, "[]", "3", ntemp);
+	statement = Replace(statement, "()", "1", ntemp);
+	statement = Replace(statement, "{}", "2", ntemp);
+	statement = Replace(statement, "[]", "3", ntemp);
 
-	// ¼Ò°ıÈ£ÀÇ Ä¡È¯ ¼ö°¡ µ¿ÀÏÇÏÁö ¾ÊÀ¸¸é Àß¸øµÈ ¹®ÀÚ¿­ Ã³¸®
-	statement = replace(statement, "(", "1*(", nPreCount);
-	statement = replace(statement, ")", ")", nAfterCount);
-
-	if (nPreCount != nAfterCount)
-	{
-		cout << 0 << endl;
-		return;
-	}
-
-	// Áß°ıÈ£ÀÇ Ä¡È¯ ¼ö°¡ µ¿ÀÏÇÏÁö ¾ÊÀ¸¸é Àß¸øµÈ ¹®ÀÚ¿­ Ã³¸®
-	statement = replace(statement, "{", "2*(", nPreCount);
-	statement = replace(statement, "}", ")", nAfterCount);
+	// ì†Œê´„í˜¸ì˜ ì¹˜í™˜ ìˆ˜ê°€ ë™ì¼í•˜ì§€ ì•Šìœ¼ë©´ ì˜ëª»ëœ ë¬¸ìì—´ ì²˜ë¦¬
+	statement = Replace(statement, "(", "1*(", nPreCount);
+	statement = Replace(statement, ")", ")", nAfterCount);
 
 	if (nPreCount != nAfterCount)
 	{
@@ -212,9 +202,9 @@ void bracketCaseCal(const string text)
 		return;
 	}
 
-	// ´ë°ıÈ£ÀÇ Ä¡È¯ ¼ö°¡ µ¿ÀÏÇÏÁö ¾ÊÀ¸¸é Àß¸øµÈ ¹®ÀÚ¿­ Ã³¸®
-	statement = replace(statement, "[", "3*(", nPreCount);
-	statement = replace(statement, "]", ")", nAfterCount);
+	// ì¤‘ê´„í˜¸ì˜ ì¹˜í™˜ ìˆ˜ê°€ ë™ì¼í•˜ì§€ ì•Šìœ¼ë©´ ì˜ëª»ëœ ë¬¸ìì—´ ì²˜ë¦¬
+	statement = Replace(statement, "{", "2*(", nPreCount);
+	statement = Replace(statement, "}", ")", nAfterCount);
 
 	if (nPreCount != nAfterCount)
 	{
@@ -222,21 +212,31 @@ void bracketCaseCal(const string text)
 		return;
 	}
 
-	// ¼±¾ğµÈ °ıÈ£ÀÇ ½ÖÀ» °Ë»ç ÈÄ ÁßÃ¸µÈ °ıÈ£¿¡ ´ëÇØ °Ë»çÇÑ´Ù.
+	// ëŒ€ê´„í˜¸ì˜ ì¹˜í™˜ ìˆ˜ê°€ ë™ì¼í•˜ì§€ ì•Šìœ¼ë©´ ì˜ëª»ëœ ë¬¸ìì—´ ì²˜ë¦¬
+	statement = Replace(statement, "[", "3*(", nPreCount);
+	statement = Replace(statement, "]", ")", nAfterCount);
+
+	if (nPreCount != nAfterCount)
+	{
+		cout << 0 << endl;
+		return;
+	}
+
+	// ì„ ì–¸ëœ ê´„í˜¸ì˜ ìŒì„ ê²€ì‚¬ í›„ ì¤‘ì²©ëœ ê´„í˜¸ì— ëŒ€í•´ ê²€ì‚¬í•œë‹¤.
 	if (statement.find("()") != string::npos)
 	{
 		cout << 0 << endl;
 		return;
 	}
 
-	// Ä¡È¯µÈ °é»ê ½ÄÀ» ÈÄÀ§½ÄÀ¸·Î º¯È¯ÇÑ´Ù.
+	// ì¹˜í™˜ëœ ê³ˆì‚° ì‹ì„ í›„ìœ„ì‹ìœ¼ë¡œ ë³€í™˜í•œë‹¤.
 	string PostFix_Expressions = GetPostFix(statement);
 
-	// ÈÄÀ§½ÄÀ» °è»êÇÑ´Ù.
+	// í›„ìœ„ì‹ì„ ê³„ì‚°í•œë‹¤.
 	int nResult = 0;
 	nResult = PostFix_Calculate(PostFix_Expressions);
 
-	// °á°ú Ãâ·Â
+	// ê²°ê³¼ ì¶œë ¥
 	cout << nResult << endl;
 }
 
@@ -256,8 +256,8 @@ int main(int argc, char *argv[])
 		return 1;
 	}	
 
-	string nCaseCount; // Å×½ºÅ© ÄÉÀÌ½º ¼ö ÀúÀå
-	char cStateMent[MAX_STATEMENT_NUM]; // °ıÈ£ ¹®ÀÚ¿­ ÀúÀå
+	string nCaseCount; // í…ŒìŠ¤í¬ ì¼€ì´ìŠ¤ ìˆ˜ ì €ì¥
+	char cStateMent[MAX_STATEMENT_NUM]; // ê´„í˜¸ ë¬¸ìì—´ ì €ì¥
 
 	if (myfile.is_open() == true)
 	{
@@ -265,8 +265,8 @@ int main(int argc, char *argv[])
 		{
 			if (nCaseCount.empty())
 			{
-				getline(myfile, nCaseCount); // Å×½ºÆ® ÄÉÀÌ½º ¼ö
-				if (atoi(nCaseCount.c_str()) > MAX_CASE_NUM) // Å×½ºÆ® ÄÉÀÌ½º ¼ö °Ë»ç
+				getline(myfile, nCaseCount); // í…ŒìŠ¤íŠ¸ ì¼€ì´ìŠ¤ ìˆ˜
+				if (atoi(nCaseCount.c_str()) > MAX_CASE_NUM) // í…ŒìŠ¤íŠ¸ ì¼€ì´ìŠ¤ ìˆ˜ ê²€ì‚¬
 				{
 					cout << "invalid Test Case Number." << endl;
 				}
@@ -280,7 +280,7 @@ int main(int argc, char *argv[])
 					continue;
 				}
 
-				//°ıÈ£ ¹®ÀÚ¿­Àº ÃÖ´ë ±æÀÌ´Â 10,000ÀÚÀÌ¹Ç·Î 10,000ÀÚ°¡ ³Ñ¾î °¡´Â ºÎºĞÀº ¹«½Ã
+				//ê´„í˜¸ ë¬¸ìì—´ì€ ìµœëŒ€ ê¸¸ì´ëŠ” 10,000ìì´ë¯€ë¡œ 10,000ìê°€ ë„˜ì–´ ê°€ëŠ” ë¶€ë¶„ì€ ë¬´ì‹œ
 				if (myfile.good() == false && myfile.eof() == false)
 				{
 					myfile.clear();
@@ -289,7 +289,7 @@ int main(int argc, char *argv[])
 					continue;
 				}
 
-				bracketCaseCal(cStateMent);
+				Bracket_Calculate(cStateMent);
 			}
 		}
 	}
